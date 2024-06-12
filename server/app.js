@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
+const contactRoutes = require('./routes/contact');
+
 mongoose
     .connect(process.env.MONGO_URL)
     .then(() => console.log('Connexion à MongoDB réussie'))
@@ -15,6 +17,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+app.use('/api/contact', contactRoutes);
 
 const port = 3000;
 app.listen(port, () => {

@@ -1,6 +1,6 @@
 const Contact = require('../models/Contact');
 
-exports.create = (res, req) => {
+exports.create = (req, res) => {
     const contact = new Contact({
         object: req.body.object,
         date: req.body.date,
