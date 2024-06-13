@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
+const companyRoutes = require('./routes/company');
 const contactRoutes = require('./routes/contact');
 
 mongoose
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+app.use('/api/company', companyRoutes);
 app.use('/api/contact', contactRoutes);
 
 const port = 3000;
