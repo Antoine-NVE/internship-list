@@ -1,19 +1,29 @@
+const Company = require('../models/Company');
 const Contact = require('../models/Contact');
 
 exports.create = (req, res) => {
-    const contact = new Contact({
-        object: req.body.object,
-        date: req.body.date,
-        content: req.body.content,
-        companyId: req.body.companyId,
-    });
+    // Il faut vérifier l'intégrité du companyId, ainsi que l'existance de l'entreprise
+    Company.findOne({ _id: req.params.companyId })
+        .then((company) => {
+            if (!company) {
+                // Si l'entreprise n'existe pas
+                res.status(400).json({ error: 'Entreprise inexistante' });
+            } else {
+                const contact = new Contact({
+                    object: req.body.object,
+                    date: req.body.date,
+                    content: req.body.content,
+                    companyId: req.params.companyId,
+                });
 
-    contact
-        .save()
-        .then(() => res.status(201).json({ message: 'Contact créé' }))
-        .catch((error) => {
-            res.status(400).json({ error });
-        });
+                contact
+                    .save()
+                    .then(() => res.status(201).json({ message: 'Contact créé' }))
+                    .catch((error) => res.status(400).json({ error }));
+            }
+        })
+        // Si le companyId n'est pas correct (caractères manquants par exemple)
+        .catch((error) => res.status(400).json({ error }));
 };
 
 exports.readOne = (req, res) => {
