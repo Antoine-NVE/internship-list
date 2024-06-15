@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Company = require('../models/Company');
+const Contact = require('../models/Contact');
 
 exports.create = (req, res) => {
     const company = new Company({
@@ -58,7 +59,7 @@ exports.readOne = (req, res) => {
 };
 
 exports.update = (req, res) => {
-    Company.updateOne(
+    Company.findOneAndUpdate(
         { _id: req.params.id },
         {
             name: req.body.name,
@@ -66,12 +67,61 @@ exports.update = (req, res) => {
             status: req.body.status,
         }
     )
-        .then(() => res.status(200).json({ message: 'Entreprise modifiée' }))
+        .then((company) => {
+            if (!company) {
+                res.status(404).json({ error: 'Entreprise inexistante' });
+            } else {
+                res.status(200).json({ message: 'Entreprise modifiée' });
+            }
+        })
         .catch((error) => res.status(400).json({ error }));
 };
 
 exports.delete = (req, res) => {
-    Company.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Entreprise supprimée' }))
-        .catch((error) => res.status(400).json({ error }));
+    mongoose
+        .startSession()
+        .then((session) => {
+            // On crée une transaction pour s'assurer que tout soit supprimé en même temps
+            session.startTransaction();
+
+            // On supprime les contacts dans la transaction
+            Contact.deleteMany({ companyId: req.params.id })
+                .session(session)
+                .then(() => {
+                    // On supprime l'entreprise dans la transaction
+                    Company.findOneAndDelete({ _id: req.params.id })
+                        .session(session)
+                        .then((company) => {
+                            // On vérifie que l'entreprise existe bien
+                            if (!company) {
+                                session.abortTransaction().then(() => {
+                                    session.endSession();
+                                    res.status(404).json({ error: 'Entreprise inexistante' });
+                                });
+                            } else {
+                                // On exécute la transaction
+                                session.commitTransaction().then(() => {
+                                    session.endSession();
+                                    res.status(200).json({ message: 'Entreprise et contacts supprimés' });
+                                });
+                            }
+                        })
+                        // Erreur au niveau de la suppression de l'entreprise
+                        .catch((error) => {
+                            session.abortTransaction().then(() => {
+                                session.endSession();
+                                res.status(400).json({ error });
+                            });
+                        });
+                })
+                // Erreur au niveau de la suppression des contacts
+                .catch((error) => {
+                    session.abortTransaction().then(() => {
+                        session.endSession();
+                        res.status(400).json({ error });
+                    });
+                });
+        })
+        // Erreur au niveau de la création de session
+        .catch((error) => res.status(500).json({ error }));
 };
