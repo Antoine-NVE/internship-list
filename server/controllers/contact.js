@@ -33,7 +33,7 @@ exports.readOne = (req, res) => {
 };
 
 exports.update = (req, res) => {
-    Contact.updateOne(
+    Contact.findOneAndUpdate(
         { _id: req.params.id },
         {
             object: req.body.object,
@@ -41,12 +41,24 @@ exports.update = (req, res) => {
             content: req.body.content,
         }
     )
-        .then(() => res.status(200).json({ message: 'Contact modifié' }))
+        .then((contact) => {
+            if (!contact) {
+                res.status(404).json({ error: 'Contact inexistant' });
+            } else {
+                res.status(200).json({ message: 'Contact modifié' });
+            }
+        })
         .catch((error) => res.status(400).json({ error }));
 };
 
 exports.delete = (req, res) => {
-    Contact.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Contact supprimé' }))
+    Contact.findOneAndDelete({ _id: req.params.id })
+        .then((contact) => {
+            if (!contact) {
+                res.status(404).json({ error: 'Contact inexistant' });
+            } else {
+                res.status(200).json({ message: 'Contact supprimé' });
+            }
+        })
         .catch((error) => res.status(400).json({ error }));
 };
