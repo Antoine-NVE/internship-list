@@ -28,7 +28,13 @@ exports.create = (req, res) => {
 
 exports.readOne = (req, res) => {
     Contact.findOne({ _id: req.params.id })
-        .then((contact) => res.status(200).json(contact))
+        .then((contact) => {
+            if (!contact) {
+                res.status(404).json({ error: 'Contact inexistant' });
+            } else {
+                res.status(200).json(contact);
+            }
+        })
         .catch((error) => res.status(400).json({ error }));
 };
 

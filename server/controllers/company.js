@@ -53,7 +53,11 @@ exports.readOne = (req, res) => {
         .then((companies) => {
             // aggregate() retourne toujours un array, on garde donc seulement l'index 0
             const company = companies[0];
-            res.status(200).json(company);
+            if (!company) {
+                res.status(404).json({ error: 'Entreprise inexistante' });
+            } else {
+                res.status(200).json(company);
+            }
         })
         .catch((error) => res.status(400).json({ error }));
 };
