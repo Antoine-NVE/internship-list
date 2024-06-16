@@ -45,6 +45,9 @@ exports.update = (req, res) => {
             object: req.body.object,
             date: req.body.date,
             content: req.body.content,
+        },
+        {
+            runValidators: true,
         }
     )
         .then((contact) => {

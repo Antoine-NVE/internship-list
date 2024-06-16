@@ -69,6 +69,9 @@ exports.update = (req, res) => {
             name: req.body.name,
             discovery: req.body.discovery,
             status: req.body.status,
+        },
+        {
+            runValidators: true,
         }
     )
         .then((company) => {
