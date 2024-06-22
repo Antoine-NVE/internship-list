@@ -1,7 +1,10 @@
-export interface Contact {
-  _id?: string;
-  object: string;
-  date: Date;
-  content?: string;
-  companyId: string;
+export interface NewContact {
+    object: string;
+    date: Date;
+    content?: string;
+    companyId: string;
+}
+
+export interface Contact extends NewContact {
+    _id: string;
 }
