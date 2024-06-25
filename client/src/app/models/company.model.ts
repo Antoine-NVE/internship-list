@@ -10,9 +10,9 @@ export interface NewCompany {
     name: string;
     discovery: string;
     status: CompanyStatus;
-    contacts: Contact[];
 }
 
 export interface Company extends NewCompany {
     _id: string;
+    contacts: Contact[];
 }

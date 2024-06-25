@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th scope="col">Nom entreprise</th>
+            <th scope="col">Découverte</th>
             <th scope="col">Objet</th>
             <th scope="col">Date</th>
             <th scope="col">Contenu</th>
@@ -20,6 +21,9 @@
                     >
                         {{ company.name }}
                     </th>
+                    <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
+                        {{ company.discovery }}
+                    </td>
                     <td>{{ contact.object }}</td>
                     <td>{{ contact.date | date }}</td>
                     <td>{{ getDisplayContent(contact.content) }}</td>
@@ -43,6 +47,7 @@
             <ng-template #noContacts>
                 <tr>
                     <th scope="row">{{ company.name }}</th>
+                    <td>{{ company.discovery }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -66,4 +71,6 @@
     </tbody>
 </table>
 
-<button class="btn btn-primary w-100">Ajouter une entreprise</button>
+<button class="btn btn-primary w-100" [routerLink]="['entreprise']">
+    Ajouter une entreprise
+</button>

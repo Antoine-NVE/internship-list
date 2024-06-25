@@ -1,1 +1,30 @@
-<p>company-form works!</p>
+<form [formGroup]="companyForm" (submit)="companyFormSubmit()">
+    <div class="mb-3">
+        <label for="name">Nom :</label>
+        <input
+            id="name"
+            type="text"
+            class="form-control"
+            formControlName="name"
+        />
+    </div>
+    <div class="mb-3">
+        <label for="discovery">Découverte :</label>
+        <input
+            id="discovery"
+            type="text"
+            class="form-control"
+            formControlName="discovery"
+        />
+    </div>
+    <div class="mb-3">
+        <label for="status">Statut :</label>
+        <select id="status" class="form-control" formControlName="status">
+            <option value="En attente">En attente</option>
+            <option value="Refusé">Refusé</option>
+            <option value="Accepté">Accepté</option>
+        </select>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Soumettre</button>
+</form>
