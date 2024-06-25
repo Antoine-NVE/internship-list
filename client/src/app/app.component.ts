@@ -20,14 +20,16 @@ export class AppComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        // this.contactService.create({
-        //     object: 'test',
-        //     date: new Date(),
-        //     companyId: '66796d3e76dd3d95d172a4fe',
-        // }).subscribe({
-        //     next: (message) => console.log(message),
-        //     error: (error) => console.error(error),
-        // });
+        // this.contactService
+        //     .create({
+        //         object: 'test',
+        //         date: new Date(),
+        //         companyId: '667a8226df761ffb7fa66670',
+        //     })
+        //     .subscribe({
+        //         next: (message) => console.log(message),
+        //         error: (error) => console.error(error),
+        //     });
         //
         // this.contactService.readOne('6676913c4c4b5336c345963c').subscribe({
         //     next: (contact) => console.log(contact),
@@ -52,7 +54,7 @@ export class AppComponent implements OnInit {
         //
         // this.companyService
         //     .create({
-        //         name: 'Europa',
+        //         name: 'Pixine',
         //         discovery: 'Appel',
         //         status: CompanyStatus.Waiting,
         //     })
