@@ -29,4 +29,11 @@ export class CompanyEditComponent implements OnInit {
             error: (error) => this.router.navigate(['entreprise']),
         });
     }
+
+    public handleCompany(company: Company) {
+        this.companyService.update(company).subscribe({
+            next: (message) => this.router.navigate(['']),
+            error: (error) => console.error(error),
+        });
+    }
 }

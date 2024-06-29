@@ -1,3 +1,7 @@
 <button class="btn btn-primary btn-sm" [routerLink]="['']">Retour</button>
 <h1>Modifier une entreprise</h1>
-<app-company-form *ngIf="company" [company]="company"></app-company-form>
+<app-company-form
+    *ngIf="company"
+    [company]="company"
+    (companyEmitted)="handleCompany($event)"
+></app-company-form>

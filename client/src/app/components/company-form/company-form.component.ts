@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Company, NewCompany } from '../../models/company.model';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CompanyService } from '../../services/company.service';
 
 @Component({
     selector: 'app-company-form',
@@ -11,16 +10,23 @@ import { CompanyService } from '../../services/company.service';
     styleUrl: './company-form.component.css',
 })
 export class CompanyFormComponent implements OnInit {
+    // Entrée pour une update
     @Input()
-    public company!: Company;
+    public company?: Company;
+
+    // Sortie pour une update
+    @Output()
+    public companyEmitted = new EventEmitter<Company>();
+
+    // Sortie pour un ajout
+    @Output()
+    public newCompanyEmitted = new EventEmitter<NewCompany>();
 
     public companyForm: FormGroup = new FormGroup({
         name: new FormControl(''),
         discovery: new FormControl(''),
         status: new FormControl('En attente'),
     });
-
-    constructor(private companyService: CompanyService) {}
 
     ngOnInit(): void {
         if (this.company) {
@@ -39,18 +45,14 @@ export class CompanyFormComponent implements OnInit {
             this.company.discovery = this.companyForm.value.discovery;
             this.company.status = this.companyForm.value.status;
 
-            this.companyService.update(this.company).subscribe({
-                next: (message) => console.log(message),
-                error: (error) => console.error(error),
-            });
+            // On envoie l'entreprise au component parent
+            this.companyEmitted.emit(this.company);
         } else {
             // Dans le cas d'un ajout, on crée une nouvelle entreprise (sans id ni contacts)
             const company: NewCompany = this.companyForm.value;
 
-            this.companyService.create(company).subscribe({
-                next: (message) => console.log(message),
-                error: (error) => console.error(error),
-            });
+            // On envoie l'entreprise au component parent
+            this.newCompanyEmitted.emit(company);
         }
     }
 }

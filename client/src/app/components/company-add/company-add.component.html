@@ -1,3 +1,5 @@
 <button class="btn btn-primary btn-sm" [routerLink]="['']">Retour</button>
 <h1>Ajouter une entreprise</h1>
-<app-company-form></app-company-form>
+<app-company-form
+    (newCompanyEmitted)="handleCompany($event)"
+></app-company-form>

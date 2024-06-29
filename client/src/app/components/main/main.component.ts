@@ -18,16 +18,7 @@ export class MainComponent implements OnInit {
 
     ngOnInit(): void {
         this.companyService.readAll().subscribe({
-            next: (companies) => {
-                this.companies = companies;
-
-                // Tests
-                for (let i = 0; i < this.companies.length; i++) {
-                    console.log(this.companies[i]);
-                    console.log(this.hasContacts(this.companies[i]));
-                    console.log(this.getNumberOfContacts(this.companies[i]));
-                }
-            },
+            next: (companies) => (this.companies = companies),
             error: (error) => console.error(error),
         });
     }
