@@ -5,3 +5,25 @@
     [company]="company"
     (companyEmitted)="handleCompany($event)"
 ></app-company-form>
+<table class="table" *ngIf="company && company.contacts.length > 0">
+    <thead>
+        <tr>
+            <th scope="col">Objet</th>
+            <th scope="col">Date</th>
+            <th scope="col">Contenu</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let contact of company.contacts">
+            <td>{{ contact.object }}</td>
+            <td>{{ contact.date | date }}</td>
+            <td>{{ contact.content }}</td>
+            <td>
+                <button class="btn btn-warning btn-sm me-1">Modifier</button>
+                <button class="btn btn-danger btn-sm">Supprimer</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button class="btn btn-primary w-100">Ajouter un contact</button>
