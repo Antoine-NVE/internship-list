@@ -37,7 +37,10 @@
                         >
                     </td>
                     <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
-                        <button class="btn btn-warning btn-sm me-1">
+                        <button
+                            class="btn btn-warning btn-sm me-1"
+                            [routerLink]="['entreprise', company._id]"
+                        >
                             Modifier
                         </button>
                         <button class="btn btn-danger btn-sm">Supprimer</button>
@@ -60,7 +63,10 @@
                         >
                     </td>
                     <td>
-                        <button class="btn btn-warning btn-sm me-1">
+                        <button
+                            class="btn btn-warning btn-sm me-1"
+                            [routerLink]="['entreprise', company._id]"
+                        >
                             Modifier
                         </button>
                         <button class="btn btn-danger btn-sm">Supprimer</button>
