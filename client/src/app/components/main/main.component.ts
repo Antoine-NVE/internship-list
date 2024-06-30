@@ -23,6 +23,20 @@ export class MainComponent implements OnInit {
         });
     }
 
+    // Permet de supprimer une entreprise
+    public deleteCompany(id: string) {
+        this.companyService.delete(id).subscribe({
+            next: (message) => {
+                // Après la suppression en base, on supprime l'entreprise de notre array, sans nouvelle requête
+                this.companies = this.companies.filter(
+                    (company) => company._id !== id
+                );
+                console.log(message);
+            },
+            error: (error) => console.error(error),
+        });
+    }
+
     // Permet de savoir le nombre de contacts
     public getNumberOfContacts(company: Company): number {
         return company.contacts.length;

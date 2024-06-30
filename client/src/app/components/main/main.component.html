@@ -12,6 +12,7 @@
     </thead>
     <tbody *ngIf="companies && companies.length > 0">
         <ng-container *ngFor="let company of companies">
+            <!-- Si l'entreprise a des contacts -->
             <ng-container *ngIf="hasContacts(company); else noContacts">
                 <tr *ngFor="let contact of company.contacts; let i = index">
                     <th
@@ -43,10 +44,21 @@
                         >
                             Modifier
                         </button>
-                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal"
+                            [attr.data-bs-target]="
+                                '#company' + company._id + 'Modal'
+                            "
+                        >
+                            Supprimer
+                        </button>
                     </td>
                 </tr>
             </ng-container>
+
+            <!-- Si l'entreprise n'a pas de contacts -->
             <ng-template #noContacts>
                 <tr>
                     <th scope="row">{{ company.name }}</th>
@@ -69,13 +81,70 @@
                         >
                             Modifier
                         </button>
-                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal"
+                            [attr.data-bs-target]="
+                                '#company' + company._id + 'Modal'
+                            "
+                        >
+                            Supprimer
+                        </button>
                     </td>
                 </tr>
             </ng-template>
         </ng-container>
     </tbody>
 </table>
+
+<!-- Modale utilisée pour les 2 cas précédents -->
+<!-- Elle n'utilise pas la même boucle que pour les <tr> car <table> ajoute du style et crée une bordure à la modale -->
+<div
+    *ngFor="let company of companies"
+    class="modal"
+    id="company{{ company._id }}Modal"
+    tabindex="-1"
+    [attr.aria-labelledby]="'company' + company._id + 'ModalLabel'"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1
+                    class="modal-title fs-5"
+                    id="company{{ company._id }}ModalLabel"
+                >
+                    Supprimer {{ company.name }} ainsi que ses contacts ?
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">Cette action est irréversible.</div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Fermer
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    (click)="deleteCompany(company._id)"
+                >
+                    Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <button class="btn btn-primary w-100" [routerLink]="['entreprise']">
     Ajouter une entreprise
