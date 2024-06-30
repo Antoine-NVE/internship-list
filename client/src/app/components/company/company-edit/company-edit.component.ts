@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CompanyService } from '../../services/company.service';
-import { Company } from '../../models/company.model';
+import { CompanyService } from '../../../services/company.service';
+import { Company } from '../../../models/company.model';
 import { CompanyFormComponent } from '../company-form/company-form.component';
 import { CommonModule } from '@angular/common';
 

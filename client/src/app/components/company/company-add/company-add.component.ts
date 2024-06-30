@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyFormComponent } from '../company-form/company-form.component';
-import { Company, CompanyStatus, NewCompany } from '../../models/company.model';
+import {
+    Company,
+    CompanyStatus,
+    NewCompany,
+} from '../../../models/company.model';
 import { CommonModule } from '@angular/common';
-import { CompanyService } from '../../services/company.service';
+import { CompanyService } from '../../../services/company.service';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
