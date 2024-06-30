@@ -14,6 +14,8 @@
         <ng-container *ngFor="let company of companies">
             <!-- Si l'entreprise a des contacts -->
             <ng-container *ngIf="hasContacts(company); else noContacts">
+                <!-- On vient créer une ligne par contact -->
+                <!-- Les informations spécifiques à l'entreprise prendront une hauteur égale au nombre de contacts -->
                 <tr *ngFor="let contact of company.contacts; let i = index">
                     <th
                         scope="row"
@@ -29,31 +31,20 @@
                     <td>{{ contact.date | date }}</td>
                     <td>{{ getDisplayContent(contact.content) }}</td>
                     <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
-                        <span
-                            class="badge text-bg-{{
-                                getBadgeColor(company.status)
-                            }}"
-                        >
-                            {{ company.status }}</span
-                        >
+                        <ng-container
+                            *ngTemplateOutlet="
+                                companyStatus;
+                                context: { companyStatus: company.status }
+                            "
+                        ></ng-container>
                     </td>
                     <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
-                        <button
-                            class="btn btn-warning btn-sm me-1"
-                            [routerLink]="['entreprise', company._id]"
-                        >
-                            Modifier
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal"
-                            [attr.data-bs-target]="
-                                '#company' + company._id + 'Modal'
+                        <ng-container
+                            *ngTemplateOutlet="
+                                companyActions;
+                                context: { companyId: company._id }
                             "
-                        >
-                            Supprimer
-                        </button>
+                        ></ng-container>
                     </td>
                 </tr>
             </ng-container>
@@ -67,30 +58,20 @@
                     <td></td>
                     <td></td>
                     <td>
-                        <span
-                            class="badge text-bg-{{
-                                getBadgeColor(company.status)
-                            }}"
-                            >{{ company.status }}</span
-                        >
+                        <ng-container
+                            *ngTemplateOutlet="
+                                companyStatus;
+                                context: { companyStatus: company.status }
+                            "
+                        ></ng-container>
                     </td>
                     <td>
-                        <button
-                            class="btn btn-warning btn-sm me-1"
-                            [routerLink]="['entreprise', company._id]"
-                        >
-                            Modifier
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal"
-                            [attr.data-bs-target]="
-                                '#company' + company._id + 'Modal'
+                        <ng-container
+                            *ngTemplateOutlet="
+                                companyActions;
+                                context: { companyId: company._id }
                             "
-                        >
-                            Supprimer
-                        </button>
+                        ></ng-container>
                     </td>
                 </tr>
             </ng-template>
@@ -98,11 +79,36 @@
     </tbody>
 </table>
 
-<!-- Modale utilisée pour les 2 cas précédents -->
+<!-- Template pour afficher le statut de l'entreprise -->
+<ng-template #companyStatus let-companyStatus="companyStatus">
+    <span class="badge text-bg-{{ getBadgeColor(companyStatus) }}">
+        {{ companyStatus }}</span
+    >
+</ng-template>
+
+<!-- Template pour afficher les boutons d'action -->
+<ng-template #companyActions let-companyId="companyId">
+    <button
+        class="btn btn-warning btn-sm me-1"
+        [routerLink]="['entreprise', companyId]"
+    >
+        Modifier
+    </button>
+    <button
+        type="button"
+        class="btn btn-danger btn-sm"
+        data-bs-toggle="modal"
+        [attr.data-bs-target]="'#company' + companyId + 'Modal'"
+    >
+        Supprimer
+    </button>
+</ng-template>
+
+<!-- Modale pour confirmer la suppression -->
 <!-- Elle n'utilise pas la même boucle que pour les <tr> car <table> ajoute du style et crée une bordure à la modale -->
 <div
     *ngFor="let company of companies"
-    class="modal"
+    class="modal fade"
     id="company{{ company._id }}Modal"
     tabindex="-1"
     [attr.aria-labelledby]="'company' + company._id + 'ModalLabel'"
