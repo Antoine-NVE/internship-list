@@ -51,11 +51,11 @@ export class MainComponent implements OnInit {
     public getBadgeColor(
         status: CompanyStatus
     ): 'warning' | 'success' | 'danger' {
-        if (status === 'Refusé') {
+        if (status === 'denied') {
             return 'danger';
         }
 
-        if (status === 'Accepté') {
+        if (status === 'accepted') {
             return 'success';
         }
 

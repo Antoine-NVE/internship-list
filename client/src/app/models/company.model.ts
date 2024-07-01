@@ -1,9 +1,9 @@
 import { Contact } from './contact.model';
 
 export enum CompanyStatus {
-    Waiting = 'En attente',
-    Declined = 'Refusé',
-    Accepted = 'Accepté',
+    Waiting = 'waiting',
+    Declined = 'denied',
+    Accepted = 'accepted',
 }
 
 export interface NewCompany {

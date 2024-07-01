@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Company, NewCompany } from '../../../models/company.model';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { companyStatusValidator } from '../../../validators/company-status.validator';
 
 @Component({
     selector: 'app-company-form',
@@ -23,9 +24,9 @@ export class CompanyFormComponent implements OnInit {
     public newCompanyEmitted = new EventEmitter<NewCompany>();
 
     public companyForm: FormGroup = new FormGroup({
-        name: new FormControl(''),
-        discovery: new FormControl(''),
-        status: new FormControl('En attente'),
+        name: new FormControl('', Validators.required),
+        discovery: new FormControl('', Validators.required),
+        status: new FormControl('status', [Validators.required, companyStatusValidator()]),
     });
 
     ngOnInit(): void {

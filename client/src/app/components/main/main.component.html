@@ -17,11 +17,7 @@
                 <!-- On vient créer une ligne par contact -->
                 <!-- Les informations spécifiques à l'entreprise prendront une hauteur égale au nombre de contacts -->
                 <tr *ngFor="let contact of company.contacts; let i = index">
-                    <th
-                        scope="row"
-                        *ngIf="i === 0"
-                        [rowSpan]="getNumberOfContacts(company)"
-                    >
+                    <th scope="row" *ngIf="i === 0" [rowSpan]="getNumberOfContacts(company)">
                         {{ company.name }}
                     </th>
                     <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
@@ -31,20 +27,10 @@
                     <td>{{ contact.date | date }}</td>
                     <td>{{ getDisplayContent(contact.content) }}</td>
                     <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
-                        <ng-container
-                            *ngTemplateOutlet="
-                                companyStatus;
-                                context: { companyStatus: company.status }
-                            "
-                        ></ng-container>
+                        <ng-container *ngTemplateOutlet="companyStatus; context: { companyStatus: company.status }"></ng-container>
                     </td>
                     <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
-                        <ng-container
-                            *ngTemplateOutlet="
-                                companyActions;
-                                context: { companyId: company._id }
-                            "
-                        ></ng-container>
+                        <ng-container *ngTemplateOutlet="companyActions; context: { companyId: company._id }"></ng-container>
                     </td>
                 </tr>
             </ng-container>
@@ -58,20 +44,10 @@
                     <td></td>
                     <td></td>
                     <td>
-                        <ng-container
-                            *ngTemplateOutlet="
-                                companyStatus;
-                                context: { companyStatus: company.status }
-                            "
-                        ></ng-container>
+                        <ng-container *ngTemplateOutlet="companyStatus; context: { companyStatus: company.status }"></ng-container>
                     </td>
                     <td>
-                        <ng-container
-                            *ngTemplateOutlet="
-                                companyActions;
-                                context: { companyId: company._id }
-                            "
-                        ></ng-container>
+                        <ng-container *ngTemplateOutlet="companyActions; context: { companyId: company._id }"></ng-container>
                     </td>
                 </tr>
             </ng-template>
@@ -82,26 +58,14 @@
 <!-- Template pour afficher le statut de l'entreprise -->
 <ng-template #companyStatus let-companyStatus="companyStatus">
     <span class="badge text-bg-{{ getBadgeColor(companyStatus) }}">
-        {{ companyStatus }}</span
-    >
+        {{ companyStatus === "accepted" ? "Accepté" : companyStatus === "denied" ? "Refusé" : "En attente" }}
+    </span>
 </ng-template>
 
 <!-- Template pour afficher les boutons d'action -->
 <ng-template #companyActions let-companyId="companyId">
-    <button
-        class="btn btn-warning btn-sm me-1"
-        [routerLink]="['entreprise', companyId]"
-    >
-        Modifier
-    </button>
-    <button
-        type="button"
-        class="btn btn-danger btn-sm"
-        data-bs-toggle="modal"
-        [attr.data-bs-target]="'#company' + companyId + 'Modal'"
-    >
-        Supprimer
-    </button>
+    <button class="btn btn-warning btn-sm me-1" [routerLink]="['entreprise', companyId]">Modifier</button>
+    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" [attr.data-bs-target]="'#company' + companyId + 'Modal'">Supprimer</button>
 </ng-template>
 
 <!-- Modale pour confirmer la suppression -->
@@ -117,41 +81,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1
-                    class="modal-title fs-5"
-                    id="company{{ company._id }}ModalLabel"
-                >
-                    Supprimer {{ company.name }} ainsi que ses contacts ?
-                </h1>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+                <h1 class="modal-title fs-5" id="company{{ company._id }}ModalLabel">Supprimer {{ company.name }} ainsi que ses contacts ?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">Cette action est irréversible.</div>
             <div class="modal-footer">
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                >
-                    Fermer
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    data-bs-dismiss="modal"
-                    (click)="deleteCompany(company._id)"
-                >
-                    Supprimer
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteCompany(company._id)">Supprimer</button>
             </div>
         </div>
     </div>
 </div>
 
-<button class="btn btn-primary w-100" [routerLink]="['entreprise']">
-    Ajouter une entreprise
-</button>
+<button class="btn btn-primary w-100" [routerLink]="['entreprise']">Ajouter une entreprise</button>
