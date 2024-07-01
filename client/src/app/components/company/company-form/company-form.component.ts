@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Company, NewCompany } from '../../../models/company.model';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { companyStatusValidator } from '../../../validators/company-status.validator';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-company-form',
     standalone: true,
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, CommonModule],
     templateUrl: './company-form.component.html',
     styleUrl: './company-form.component.css',
 })
@@ -26,8 +27,12 @@ export class CompanyFormComponent implements OnInit {
     public companyForm: FormGroup = new FormGroup({
         name: new FormControl('', Validators.required),
         discovery: new FormControl('', Validators.required),
-        status: new FormControl('status', [Validators.required, companyStatusValidator()]),
+        status: new FormControl('status', companyStatusValidator()),
     });
+    public name = this.companyForm.controls['name'];
+    public discovery = this.companyForm.controls['discovery'];
+    public status = this.companyForm.controls['status'];
+    public isSubmitted: boolean = false;
 
     ngOnInit(): void {
         if (this.company) {
@@ -40,20 +45,24 @@ export class CompanyFormComponent implements OnInit {
     }
 
     public companyFormSubmit() {
-        if (this.company) {
-            // Dans le cas d'une update, on modifie l'entreprise existante
-            this.company.name = this.companyForm.value.name;
-            this.company.discovery = this.companyForm.value.discovery;
-            this.company.status = this.companyForm.value.status;
+        this.isSubmitted = true;
 
-            // On envoie l'entreprise au component parent
-            this.companyEmitted.emit(this.company);
-        } else {
-            // Dans le cas d'un ajout, on crée une nouvelle entreprise (sans id ni contacts)
-            const company: NewCompany = this.companyForm.value;
+        if (!this.name.errors && !this.discovery.errors && !this.status.errors) {
+            if (this.company) {
+                // Dans le cas d'une update, on modifie l'entreprise existante
+                this.company.name = this.companyForm.value.name;
+                this.company.discovery = this.companyForm.value.discovery;
+                this.company.status = this.companyForm.value.status;
 
-            // On envoie l'entreprise au component parent
-            this.newCompanyEmitted.emit(company);
+                // On envoie l'entreprise au component parent
+                this.companyEmitted.emit(this.company);
+            } else {
+                // Dans le cas d'un ajout, on crée une nouvelle entreprise (sans id ni contacts)
+                const company: NewCompany = this.companyForm.value;
+
+                // On envoie l'entreprise au component parent
+                this.newCompanyEmitted.emit(company);
+            }
         }
     }
 }
