@@ -1,10 +1,6 @@
 <button class="btn btn-primary btn-sm" [routerLink]="['']">Retour</button>
 <h1>Modifier une entreprise</h1>
-<app-company-form
-    *ngIf="company"
-    [company]="company"
-    (companyEmitted)="handleCompany($event)"
-></app-company-form>
+<app-company-form *ngIf="company" [company]="company" (companyEmitted)="handleCompany($event)"></app-company-form>
 <table class="table" *ngIf="company && company.contacts.length > 0">
     <thead>
         <tr>
@@ -26,4 +22,4 @@
         </tr>
     </tbody>
 </table>
-<button class="btn btn-primary w-100">Ajouter un contact</button>
+<button class="btn btn-primary w-100" [routerLink]="['contact']">Ajouter un contact</button>

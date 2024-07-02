@@ -1,1 +1,24 @@
-<p>contact-form works!</p>
+<form class="mb-1" [formGroup]="contactForm" (submit)="contactFormSubmit()">
+    <div class="mb-3">
+        <label for="object">Objet :</label>
+        <input
+            id="object"
+            type="text"
+            class="form-control"
+            [ngClass]="(object.touched || isSubmitted) && object.errors ? 'is-invalid' : ''"
+            formControlName="object"
+        />
+        <div class="invalid-feedback">Objet requis</div>
+    </div>
+    <div class="mb-3">
+        <label for="date">Date :</label>
+        <input id="date" type="date" class="form-control" [ngClass]="(date.touched || isSubmitted) && date.errors ? 'is-invalid' : ''" formControlName="date" />
+        <div class="invalid-feedback">Date requise</div>
+    </div>
+    <div class="mb-3">
+        <label for="content">Contenu :</label>
+        <input id="content" type="text" class="form-control" formControlName="content" />
+    </div>
+
+    <button class="btn btn-primary d-block ms-auto" type="submit">Soumettre</button>
+</form>
