@@ -17,9 +17,36 @@
             <td>{{ contact.content }}</td>
             <td>
                 <button class="btn btn-warning btn-sm me-1" [routerLink]="['/contact', contact._id]">Modifier</button>
-                <button class="btn btn-danger btn-sm">Supprimer</button>
+                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" [attr.data-bs-target]="'#contact' + contact._id + 'Modal'">Supprimer</button>
             </td>
         </tr>
     </tbody>
 </table>
+
+<ng-container *ngIf="company">
+    <!-- Cette modale n'est pas dans la même boucle car cela pose des problèmes avec le CSS de Bootstrap -->
+    <div
+        *ngFor="let contact of company.contacts"
+        class="modal fade"
+        id="contact{{ contact._id }}Modal"
+        tabindex="-1"
+        [attr.aria-labelleby]="'contact' + contact._id + 'ModalLabel'"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="contact{{ contact._id }}ModalLabel">Supprimer ce contact ?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Cette action est irréversible.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-danger" (click)="deleteContact(contact._id)" data-bs-dismiss="modal">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
 <button class="btn btn-primary w-100" [routerLink]="['contact']">Ajouter un contact</button>

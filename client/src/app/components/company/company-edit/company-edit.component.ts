@@ -4,6 +4,7 @@ import { CompanyService } from '../../../services/company.service';
 import { Company } from '../../../models/company.model';
 import { CompanyFormComponent } from '../company-form/company-form.component';
 import { CommonModule } from '@angular/common';
+import { ContactService } from '../../../services/contact.service';
 
 @Component({
     selector: 'app-company-edit',
@@ -15,11 +16,7 @@ import { CommonModule } from '@angular/common';
 export class CompanyEditComponent implements OnInit {
     public company!: Company;
 
-    constructor(
-        private route: ActivatedRoute,
-        private companyService: CompanyService,
-        private router: Router
-    ) {}
+    constructor(private route: ActivatedRoute, private companyService: CompanyService, private contactService: ContactService, private router: Router) {}
 
     ngOnInit(): void {
         const id: string = this.route.snapshot.paramMap.get('id')!;
@@ -30,6 +27,15 @@ export class CompanyEditComponent implements OnInit {
         });
     }
 
+    // Permet de supprimer un contact
+    public deleteContact(id: string) {
+        this.contactService.delete(id).subscribe({
+            next: (message) => (this.company.contacts = this.company.contacts.filter((contact) => contact._id !== id)),
+            error: (error) => console.error(error),
+        });
+    }
+
+    // Permet de récupérer l'entreprise modifiée
     public handleCompany(company: Company) {
         this.companyService.update(company).subscribe({
             next: (message) => this.router.navigate(['']),
