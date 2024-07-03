@@ -13,10 +13,10 @@
     <tbody>
         <tr *ngFor="let contact of company.contacts">
             <td>{{ contact.object }}</td>
-            <td>{{ contact.date | date }}</td>
+            <td>{{ contact.date | date : "dd/MM/YYYY" }}</td>
             <td>{{ contact.content }}</td>
             <td>
-                <button class="btn btn-warning btn-sm me-1">Modifier</button>
+                <button class="btn btn-warning btn-sm me-1" [routerLink]="['/contact', contact._id]">Modifier</button>
                 <button class="btn btn-danger btn-sm">Supprimer</button>
             </td>
         </tr>

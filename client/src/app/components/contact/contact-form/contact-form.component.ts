@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Contact, NewContact } from '../../../models/contact.model';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
     templateUrl: './contact-form.component.html',
     styleUrl: './contact-form.component.css',
 })
-export class ContactFormComponent {
+export class ContactFormComponent implements OnInit {
     // Entrée pour une update
     @Input()
     public contact?: Contact;
@@ -36,12 +36,28 @@ export class ContactFormComponent {
 
     constructor(private route: ActivatedRoute) {}
 
+    ngOnInit(): void {
+        if (this.contact) {
+            this.contactForm.patchValue({
+                object: this.contact.object,
+                date: new Date(this.contact.date).toISOString().split('T')[0], // this.contact.date semble n'être ni une Date ni un string
+                content: this.contact.content,
+            });
+        }
+    }
+
     public contactFormSubmit() {
         this.isSubmitted = true;
 
         if (!this.object.errors && !this.date.errors) {
             if (this.contact) {
-                // UPDATE
+                // Dans le cas d'une update, on modifie l'ancien contact
+                this.contact.object = this.object.value;
+                this.contact.date = this.date.value;
+                this.contact.content = this.content.value;
+
+                // On envoie le contact au composant parent
+                this.contactEmitted.emit(this.contact);
             } else {
                 // Dans le cas d'un ajout, on crée un nouveau contact (sans id)
                 const contact: NewContact = {

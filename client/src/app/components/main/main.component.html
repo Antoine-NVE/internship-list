@@ -24,7 +24,7 @@
                         {{ company.discovery }}
                     </td>
                     <td>{{ contact.object }}</td>
-                    <td>{{ contact.date | date }}</td>
+                    <td>{{ contact.date | date : "dd/MM/YYYY" }}</td>
                     <td>{{ getDisplayContent(contact.content) }}</td>
                     <td *ngIf="i === 0" [rowSpan]="company.contacts.length">
                         <ng-container *ngTemplateOutlet="companyStatus; context: { companyStatus: company.status }"></ng-container>
