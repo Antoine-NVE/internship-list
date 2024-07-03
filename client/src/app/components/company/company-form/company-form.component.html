@@ -1,7 +1,14 @@
 <form class="mb-1" [formGroup]="companyForm" (submit)="companyFormSubmit()">
     <div class="mb-3">
         <label for="name">Nom :</label>
-        <input id="name" type="text" class="form-control" [ngClass]="(name.touched || isSubmitted) && name.errors ? 'is-invalid' : ''" formControlName="name" />
+        <input
+            #inputFocus
+            id="name"
+            type="text"
+            class="form-control"
+            [ngClass]="(name.touched || isSubmitted) && name.errors ? 'is-invalid' : ''"
+            formControlName="name"
+        />
         <div *ngIf="name.errors" class="invalid-feedback">Nom requis</div>
     </div>
     <div class="mb-3">

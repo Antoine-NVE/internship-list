@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Company, NewCompany } from '../../../models/company.model';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { companyStatusValidator } from '../../../validators/company-status.validator';
@@ -11,7 +11,10 @@ import { CommonModule } from '@angular/common';
     templateUrl: './company-form.component.html',
     styleUrl: './company-form.component.css',
 })
-export class CompanyFormComponent implements OnInit {
+export class CompanyFormComponent implements OnInit, AfterViewInit {
+    @ViewChild('inputFocus')
+    inputFocus!: ElementRef<HTMLInputElement>;
+
     // Entrée pour une update
     @Input()
     public company?: Company;
@@ -42,6 +45,10 @@ export class CompanyFormComponent implements OnInit {
                 status: this.company.status,
             });
         }
+    }
+
+    ngAfterViewInit(): void {
+        this.inputFocus.nativeElement.focus();
     }
 
     public companyFormSubmit() {

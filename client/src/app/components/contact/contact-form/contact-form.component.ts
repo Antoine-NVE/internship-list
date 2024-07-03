@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Contact, NewContact } from '../../../models/contact.model';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +11,10 @@ import { CommonModule } from '@angular/common';
     templateUrl: './contact-form.component.html',
     styleUrl: './contact-form.component.css',
 })
-export class ContactFormComponent implements OnInit {
+export class ContactFormComponent implements OnInit, AfterViewInit {
+    @ViewChild('inputFocus')
+    inputFocus!: ElementRef<HTMLInputElement>;
+
     // Entrée pour une update
     @Input()
     public contact?: Contact;
@@ -44,6 +47,10 @@ export class ContactFormComponent implements OnInit {
                 content: this.contact.content,
             });
         }
+    }
+
+    ngAfterViewInit(): void {
+        this.inputFocus.nativeElement.focus();
     }
 
     public contactFormSubmit() {
